@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{%block head%}
+<title>Virtual Data scientist</title>
+<h1>Virtual Data Scientist</h1> 
+{%endblock%}
+
+{%block body%}
+<div style="align-items: center;">
+<h2>Upload Csv files</h2>  
+<form action="/upload" method=post enctype=multipart/form-data>
+    <input id="inp" type=file name=inputfile>
+    <input id="inp2" type=submit>
+</form>
+</br>
+</div>
+{% for table in tables %}
+      {{ table|safe }}
+{% endfor %}
+</form>
+{%endblock%}
