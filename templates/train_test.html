@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{%block head%}
+<title>Virtual Data scientist</title>
+<h2>Train-Test Split</h2> 
+{%endblock%}
+
+{%block body%}
+<div style="align-items: center;">
+    <!-- <i>Page for Train-Test split</i> -->
+    <form method="POST">
+        <input name="y_column_name" >
+        <input type="submit">
+    </form>
+    <div>
+        {% for table in tables %}
+            <h3>{{ titles[loop.index] }}</h3> 
+            {{ table|safe }}
+        {% endfor %}
+    </div>
+    <div class="slidecontainer">
+        <h3>Specify how much percentage to split your data</h3>
+        <input type="range" min="1" value="50" max="100" class="slider" id="myRange">
+        <p>Percentage:<span id="demo"></span></p>
+        <input type="submit" onclick="submit()">
+    </div>
+    <!-- <a href="https://stackoverflow.com/users/12341627/deepak-velu?theme=dark"><img src="https://stackoverflow.com/users/flair/12341627.png" width="208" height="58" alt="profile for Deepak velu at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for Deepak velu at Stack Overflow, Q&amp;A for professional and enthusiast programmers"></a> -->
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value;
+    var dt = {'value':output.innerHTML}
+    slider.oninput = function(){
+        output.innerHTML = this.value;
+        dt['value'] = this.value;
+    }
+    function submit(){ 
+        alert("Train-Test split successfull") 
+        $.ajax({   
+            contentType: "application/json;charset=utf-8",
+            url: "/train_test",
+            type:"POST",
+            data: JSON.stringify(dt),
+        });
+    }
+</script>
+{%endblock%}
