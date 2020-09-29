@@ -14,8 +14,16 @@
 </form>
 </br>
 </div>
-{% for table in tables %}
+{% set ok = namespace(value=0) %}
+{% for table in tables %} 
       {{ table|safe }}
+      {{ ok.value }}
+      {% set ok.value = ok.value+1 %}
 {% endfor %}
 </form>
+<!-- </br> -->
+</br>
+{% if ok.value > 0 %}
+<a style="background:snow;padding:20px;width:200px;height:150px;border-radius: 25px; border: 5px solid black;" href="{{ url_for('train_test')}}">Train-Test Split</a>
+{% endif %}
 {%endblock%}
