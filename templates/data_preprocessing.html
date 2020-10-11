@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{%block head%}
+<title>Virtual Data scientist</title>
+<h2>Data-preprocessing</h2> 
+{%endblock%}
+
+{%block body%}
+<div style="align-items: center;">
+    <form method="POST">
+        <div class="tab">Missing Values:
+            <p>Target variable:<input placeholder="Target variable..." oninput="this.className=''" 
+                name="y_column_name_preprocessing" id="y_column_name_preprocessing"></p>
+            <p>Type of imputation:<select id="drop_down" name="drop_down">
+                <option value="drop">Dropping columns with missing values</option>
+                <option value="impute">Imputation</option>
+                <option value="extension">Extension to imputation</option>
+            </select></p>
+        </div>
+        <input type="submit" onclick="submit_response()">
+    </form>
+    <div>
+        {% set ok = namespace(value=0) %}
+        {% for table in tables %}
+            <h3>{{ titles[loop.index] }}</h3> 
+            {{ table|safe }}
+            {{ ok.value }}
+            {% set ok.value = ok.value+1 %}
+        {% endfor %}
+    </div>
+    {% if ok.value > 0 %}
+    <a style="background:snow;padding:20px;width:200px;height:150px;border-radius: 25px; border: 5px solid black;" href="{{ url_for('train_test')}}">Train-test Split</a>
+    {% endif %}
+</div>
+<script>
+function submit_response(){
+    alert('Target variable splitted')
+}
+</script>
+{%endblock%}
