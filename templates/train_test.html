@@ -2,23 +2,89 @@
 
 {%block head%}
 <title>Virtual Data scientist</title>
-<h2>Train-Test Split</h2> 
 {%endblock%}
 
 {%block body%}
-<div style="align-items: center;">
-    <div class="slidecontainer">
-        <form method="POST">
-            <h3>Specify how much percentage to split your data</h3>
-            <input type="range" min="1" value="50" max="100" class="slider" id="myRange" name="myRange">
-            <p>Percentage:<span id="demo"></span></p>
-            <input type="submit" onclick="submit()">
-        </form>
-    </div>
-    <!-- <a href="https://stackoverflow.com/users/12341627/deepak-velu?theme=dark"><img src="https://stackoverflow.com/users/flair/12341627.png" width="208" height="58" alt="profile for Deepak velu at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for Deepak velu at Stack Overflow, Q&amp;A for professional and enthusiast programmers"></a> -->
+<div style="align-items: center;">        
+    <button class="collapsible">Train-Test Split</button>
+        <div class="content">
+            <div class="slidecontainer">
+                <form method="POST">
+                    <i>Hold-out cross-validation (recommended for larger datasets)</i>
+                    <h4>Specify how much percentage to split your data</h4>
+                    <input type="range" min="1" value="50" max="100" class="slider" id="myRange" name="myRange">
+                    <p>Percentage:<span id="demo"></span></p>
+                    <input type="submit" value="Submit" onclick="return submit_split()">
+                </form> 
+            </div>
+        </div>
+
+    <button class="collapsible">k-fold cross-validation</button>
+        <div class="content">
+            <form method="POST">
+            <h4>Specify number of splits</h4>
+            <p>N_splits:<select id="drop_down" name="drop_down">
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="10">10<i>(recommended)</i></option>
+            </select></p>
+            <p>Shuffle Dataset? <input type="checkbox" id="shuffle" name="shuffle_dataset" value="shuffle"></p>
+            <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state" value="0"></p>
+            <input type="submit" value="Submit" onclick="return submit_kfold()">
+            </form>
+        </div>
+
+        <button class="collapsible">Stratified k-fold cross-validation</button>
+        <div class="content">
+            <form method="POST">
+            <h4>Specify number of splits</h4>
+            <i>Recommended for skewed dataset and Classification problem</i>
+            <p>N_splits:<select id="drop_down_st" name="drop_down_st">
+                <option value="3">3</option>
+                <option value="5">5<i>(recommended)</i></option>
+                <option value="10">10</option>
+            </select></p>
+            <p>Shuffle Dataset? <input type="checkbox" id="shuffle_st" name="shuffle_dataset_st" value="shuffle"></p>
+            <p>Random State:<input placeholder="Random State..." name="random_state_st" id="random_state_st" value="0"></p>
+            <input type="submit" value="Submit" onclick="return submit_kfold_st()">
+            </form>
+        </div>
+
+        <button class="collapsible">Stratified k-fold cross-validation for regression</button>
+        <div class="content">
+            <form method="POST">
+            <h4>Specify number of splits</h4>
+            <i>Recommended for skewed dataset</i>
+            <p>N_splits:<select id="drop_down_rg" name="drop_down_rg">
+                <option value="3">3</option>
+                <option value="5">5<i>(recommended)</i></option>
+                <option value="10">10</option>
+            </select></p>
+            <p>Shuffle Dataset? <input type="checkbox" id="shuffle_rg" name="shuffle_dataset_rg" value="shuffle"></p>
+            <p>Random State:<input placeholder="Random State..." name="random_state_rg" id="random_state_rg" value="0"></p>
+            <input type="submit" value="Submit" onclick="return submit_kfold_rg()">
+            </form>
+        </div>
+    
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script>
+    //collapsible
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;        
+        if (content.style.maxHeight){
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+        } 
+    });
+    }
+    //slider in train-test split
     var slider = document.getElementById("myRange");
     var output = document.getElementById("demo");
     output.innerHTML = slider.value;
@@ -27,14 +93,60 @@
         output.innerHTML = this.value;
         dt['value'] = this.value;
     }
-    function submit(){ 
-        alert("Train-Test split successfull") 
+    function submit_split(){
+        var split_value = Math.round(document.getElementById("myRange").value);
+        if(split_value<50){
+            if(confirm("Training data seems to have less data than validation. Do you wish to continue?")){
+                alert("Train-Test split successfull");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            alert("Train-Test split successfull");
+            return true;
+        }     
+    }
+    function submit_kfold(){
+        var random_state = Math.round(document.getElementById("random_state").value);
+        if(isNaN(random_state)){
+            alert("Proper input required");
+            return false;
+        }
+        else{
+            alert("K-fold split is successfull");
+            return true;
+        }
+    }
+    function submit_kfold_st(){
+        var random_state = Math.round(document.getElementById("random_state_st").value);
+        if(isNaN(random_state)){
+            alert("Proper input required");
+            return false;
+        }
+        else{
+            alert("Stratified K-fold split is successfull");
+            return true;
+        } 
+    }
+    function submit_kfold_rg(){
+        var random_state = Math.round(document.getElementById("random_state_rg").value);
+        if(isNaN(random_state)){
+            alert("Proper input required");
+            return false;
+        }
+        else{
+            alert("Stratified K-fold split for regression is successfull");
+            return true;
+        }  
+    }
         // $.ajax({   
         //     contentType: "application/json;charset=utf-8",
         //     url: "/train_test",
         //     type:"POST",
         //     data: JSON.stringify(dt),
         // });
-    }
 </script>
 {%endblock%}
