@@ -1,7 +1,7 @@
 # Virtual Data Scientist
 
 A python flask based website :globe_with_meridians: for basic data processing and prediction.<br>
-<b>Users don't need to code just given in some inputs and find which works and which does not :cowboy_hat_face:.</b><br>
+<b>Users don't need to code, just given in some inputs and find which works and which does not :cowboy_hat_face:.</b><br>
 Make sure to input csv files :white_check_mark:. It only works if a target variable is known.<br>
 
 <h4>Kinds of functions that can be done:</h4>
