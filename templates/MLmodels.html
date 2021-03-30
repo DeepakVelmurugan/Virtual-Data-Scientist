@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{%block head%}
+<title>Virtual Data scientist</title>
+<h2>Machine Learning Models</h2> 
+<style>
+    * {
+    box-sizing: border-box;
+    }
+    /* Float four columns side by side */
+    .column {
+    float: left;
+    display: fixed;
+    width: 25%;
+    height: 25%;
+    padding: 10px 10px;
+    }
+    .columnNeural {
+    float: left;
+    display: fixed;
+    width: 37%;
+    height: 25%;
+    padding: 10px 10px;
+    }
+
+    /* Remove extra left and right margins, due to padding */
+    .row {margin: 0 -5px;}
+
+    /* Clear floats after the columns */
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+
+    /* Responsive columns */
+    @media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+        }
+    }
+
+
+    /* Style the counter cards */
+    .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    background-color: rgba(168, 138, 216, 0.253);
+    }
+
+    .cardScore {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    background-color: rgba(230, 116, 178, 0.253);
+    }
+
+    /*ol horizontal*/
+    ul{
+        list-style: none;
+        margin-left: 0;
+        padding-left: 0;
+    }
+    li{
+        display: inline;
+        padding-left: 1em;
+        text-indent: -1em;
+    }
+    li:before{
+        /* content: ">";
+        padding-right: 2px; */
+        content: "►";
+        padding-right: 2px;
+        width: 1em;
+        color:rgb(0, 0, 0);
+    }
+</style>
+{%endblock%}
+
+{%block body%}
+<div class="row">
+    <div class="column">
+        <div class="card">
+            <div class=randomforest>
+                <form method="POST">
+                    <h4>Random Forest Regressor</h4>
+                    <p>No of estimators:<input placeholder="n_estimators..." name="n_estimators" id="n_estimators" value="400"></p>
+                    <p>Max depth:<input placeholder="max_depth..." name="max_depth" id="max_depth" value="None"></p>
+                    <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state_rf" value="0"></p>
+                    <p>Evaluation metric:<select id="drop_down_rf" name="evaluation_metric">
+                        <option value="MAE">Mean Absolute Error</option>
+                        <option value="Inprogress"><i>(yet to come)</i></option>
+                    </select></p>
+                    <input type="hidden" id="type" name="type" value="randomforest">
+                    <input type="submit" value="Submit" onclick="return submit_RandomForest()">
+                </form>            
+            </div>
+        </div>
+      </div>
+    
+      <div class="column">
+        <div class="card">
+            <div class="logisticregression">
+                <form method="POST">
+                    <h4>Logistic Regression</h4>
+                    <p>Penalty:<select id="drop_down_penalty" name="penalty">
+                        <option value="l2">L2</option>
+                        <option value="l1">L1</option>
+                        <option value="elasticnet">Elasticnet</option>
+                    </select></p>
+                    <p>Max iter:<input name="max_iter" id="max_iter" value="100"></p>
+                    <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state_logr" value="0"></p>
+                    <p>Evaluation metric:<select id="drop_down_logr" name="evaluation_metric">
+                        <option value="MAE">Mean Absolute Error</option>
+                        <option value="Inprogress"><i>(yet to come)</i></option>
+                    </select></p>
+                    <input type="hidden" id="type" name="type" value="logisticregression">
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="card">
+            <div class="LinearRegression">
+                <form method="POST">
+                    <h4>Linear Regression</h4>
+                    <p>Fit intercept:<select id="drop_down_lr_fit" name="intercept">
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                        </select></p>
+                    <p>Normalize:<select id="drop_down_lr" name="normalize">
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                        </select></p>
+                    <p>Evaluation metric:<select id="drop_down_rf" name="evaluation_metric">
+                        <option value="MAE">Mean Absolute Error</option>
+                        <option value="Inprogress"><i>(yet to come)</i></option>
+                    </select></p>
+                    <input type="hidden" id="type" name="type" value="LinearRegression">
+                    <input type="submit" value="Submit" >
+                </form>
+            </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="card">
+            <div class="XGBoost">
+                <form method="POST">
+                    <h4>Extreme Gradient boosting(XGBoost)</h4>
+                    <p>No of estimators:<input placeholder="n_estimators..." name="n_estimators" id="n_estimators" value="400"></p>
+                    <p>Max depth:<input placeholder="max_depth..." name="max_depth" id="max_depth" value="None"></p>
+                    <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state_xgb" value="0"></p>
+                    <p>Learning rate:<input name="learning_rate" id = "learning_rate" value="0.01"></p>
+                    <p>Evaluation metric:<select id="drop_down_xgb" name="evaluation_metric">
+                        <option value="MAE">Mean Absolute Error</option>
+                        <option value="Inprogress"><i>(yet to come)</i></option>
+                    </select></p>
+                    <input type="hidden" id="type" name="type" value="XGBoost">
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="card">
+            <div class="DecisionTreeClassifier">
+                <form method="POST">
+                    <h4>Decision Tree Classifier</h4>
+                    <p>Max features:<input name="max_features" id="max_features" value="None"></p>
+                    <p>Max depth:<input name="max_depth" id="max_depth" value="None"></p>
+                    <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state_dtc" value="0"></p>
+                    <p>Evaluation metric:<select id="drop_down_rf" name="evaluation_metric">
+                        <option value="MAE">Mean Absolute Error</option>
+                        <option value="Inprogress"><i>(yet to come)</i></option>
+                    </select></p>
+                    <input type="hidden" id="type" name="type" value="DecisionTreeClassifier">
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+      </div>
+
+      <div class="columnNeural">
+          <div class="card">
+              <div class="NeuralNets">
+                  <form method="POST" onsubmit="return validateNeuralForm();">
+                      <h4>Neural Networks</h4><br>
+                      <i style="font-size: small;">The below field denotes the hidden layers you want for the neural net and type in comma to confirm it as ith layer</i>
+                      <p>Hidden layers:<input name="hidden_layers" id="hidden_layers"></p>
+                      <ul id="ol_horizontal"></ul>
+                      <p>Activation:<select id="drop_down_act" name="activation" >
+                        <option value="logistic">Sigmoid</option>
+                        <option value="tanh">TanH</option>
+                        <option value="relu">ReLU</option>
+                        </select>
+                        
+                     </p>
+                     <p>Optimizer:<select id="drop_down_opt" name="solver" onchange="displayMomemtum()">
+                        <option value="adam">Adam</option>
+                        <option value="sgd">SGD</option>
+                        <option value="lbfgs">LBFGS</option>
+                        </select>
+                        <div id="sgd_momemtum" style="display: none;"><p>Momemtum<input type="checkbox" id="momemtum" name="nesterovs_momentum" value="False"></p></div>
+                     </p>
+                     <p>Learning rate:<input name="learning_rate" id="learning_rate" value="0.001"></p>
+                     <p>Type:<select id="drop_down_type" name="type_of_model">
+                        <option value="Regression">Regression</option>
+                        <option value="Classification">Classification</option>
+                     </select></p>
+                     <input type="hidden" id="type" name="type" value="NeuralNets">
+                     <input type="submit" value="Submit" onclick="return fillhiddenlayers()">
+                  </form>
+              </div>
+          </div>
+      </div>
+      <div class="columnNeural">
+        <div class="cardScore">
+            <div class="Scores">
+                <strong>Your model score:</strong>
+                <h3>{{ scores[0] }}</h3>
+                <script>
+                    function changeColor(){
+                        var currScore = '{{scores[0]}}';
+                        scores = localStorage.getItem("scores");
+                        if(parseInt(scores) == 0){
+                            localStorage.setItem("scores",currScore)
+                        }
+                        else if(parseInt(scores)>currScore){
+                            document.getElementsByClassName("cardScore")[0].style.backgroundColor = 'rgb(144,238,144)';
+                            localStorage.setItem("scores",currScore)
+                        }
+                        else{
+                            document.getElementsByClassName("cardScore")[0].style.backgroundColor = 'rgb(255, 51, 51)';
+                            localStorage.setItem("scores",currScore)
+                        }
+                    }
+                    changeColor();
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var hidden_layers = document.querySelector("#hidden_layers")
+    var layer_list = document.querySelector("#ol_horizontal");
+    var layers = [];
+    //on press of comma pushes to layers
+    hidden_layers.addEventListener('keyup',function(event){
+        if(event.keyCode === 188){
+            if(this.value.length<2){
+                alert("Add comma after specifying layer size!");
+                this.value="";
+            }
+            else{
+                var layer = this.value.substring(0,this.value.length-1);
+                if(isNaN(Math.round(layer))){
+                    alert("Proper input required");
+                    this.value = "";
+                    return;
+                }
+                layers.push(layer);
+                this.value="";
+                reloadHorizontal();
+            }
+        }
+    })
+    //for displaying the list
+    function reloadHorizontal(){
+        layer_list.innerHTML = "";
+        for(var i=0;i<layers.length;i++){
+            layer_list.innerHTML += `<li>${layers[i]}</li>`;
+        }
+    }
+    function displayMomemtum(){
+        if(document.getElementById("drop_down_opt").value == "sgd"){
+            document.getElementById("sgd_momemtum").style.display = "block";
+        }
+        else{
+            document.getElementById("sgd_momemtum").style.display = "none";
+        }   
+    }
+    function validateNeuralForm(){
+        if(layers.length==0){
+            alert("Hidden layers can not be null");
+            return false;
+        }
+        return true;
+    }
+    function fillhiddenlayers(){
+        hidden_layers.value = layers;
+        if(document.getElementById("momemtum").checked){
+            document.getElementById("momemtum").value = "True";
+        }
+    }
+
+    function submit_RandomForest(){
+        var random_state = Math.round(document.getElementById("random_state_rf").value);
+        if(isNaN(random_state)){
+            alert("Proper input required");
+            return false;
+        }
+        else{
+            alert("Prediction successfull");
+            return true;
+        } 
+    }
+</script>
+{% endblock %}
