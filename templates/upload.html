@@ -2,28 +2,158 @@
 
 {%block head%}
 <title>Virtual Data scientist</title>
-<h1>Virtual Data Scientist</h1> 
+<style>
+        * {
+            box-sizing: border-box;
+        }
+        body{
+            background: #005AA7;  
+            background: -webkit-linear-gradient(to right, #FFFDE4, #005AA7);  
+            background: linear-gradient(to right, #FFFDE4, #005AA7); 
+        }
+        .column {
+            float: left;
+            display: flex;           
+            flex-direction: column;  
+            justify-content: center; 
+            align-items: center;     
+            width: 100%;
+            height: 100%;
+            padding: 50px 70px;
+        }
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            background: #74ebd5;  
+            background: -webkit-linear-gradient(to right, #ACB6E5, #74ebd5);  
+            background: linear-gradient(to right, #ACB6E5, #74ebd5); 
+        }
+        .columnTable {
+            float: right;   
+            display: flex;           /* establish flex container */
+            justify-content: center; /* center items vertically, in this case */
+            align-items: center;     /* center items horizontally, in this case */
+            width: 100%;
+            height: 70%;
+            padding: 50px 30px;
+        }
+        .cardTable {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0);
+        }
+            ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #005AA7;  
+            background: -webkit-linear-gradient(to right, #FFFDE4, #005AA7);  
+            background: linear-gradient(to right, #FFFDE4, #005AA7); 
+
+            }
+
+            li {
+                align-items: center;
+            }
+
+            li h3 {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            }
+
+            a{
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                background: #74ebd5; 
+                background: -webkit-linear-gradient(to right, #ACB6E5, #74ebd5); 
+                background: linear-gradient(to right, #ACB6E5, #74ebd5);
+                padding:20px;
+                width:200px;
+                height:150px;
+                border-radius: 25px;
+                color: white;
+                text-decoration: none;
+            }
+            a:hover{
+                background: #ec008c;  /* fallback for old browsers */
+                background: -webkit-linear-gradient(to top, #fc6767, #ec008c);  /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to top, #fc6767, #ec008c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            }
+
+</style>
 {%endblock%}
 
 {%block body%}
 <div style="align-items: center;">
-<h2>Upload Csv files</h2>  
-<form action="/upload" method=post enctype=multipart/form-data>
-    <input id="inp" type=file name=inputfile>
-    <input id="inp2" type=submit>
-</form>
-</br>
+    <ul>
+        <li><h3>Virtual Data Scientist</h3></li>
+    </ul>
+<div class="column">
+<div class="card">
+    <h3>Upload Csv files</h3>  
+    <form action="/upload" method=post enctype=multipart/form-data>
+        <input id="inp" type=file name=inputfile>
+        <p>Choose index:<input placeholder="index..." name="idx" id="idx" value="None"></p>
+        <input id="inp2" type=submit onclick="return submit_form()">
+    </form>
 </div>
-{% set ok = namespace(value=0) %}
-{% for table in tables %} 
-      {{ table|safe }}
-      {{ ok.value }}
-      {% set ok.value = ok.value+1 %}
-{% endfor %}
-</form>
-<!-- </br> -->
-</br>
-{% if ok.value > 0 %}
-<a style="background:snow;padding:20px;width:200px;height:150px;border-radius: 25px; border: 5px solid black;" href="{{ url_for('data_preprocessing')}}">Data-preprocessing</a>
-{% endif %}
+</div>
+
+</div>
+<h4 id="dispMsg"></h4>
+<div class="columnTable">
+    <div class="cardTable">
+        {% for table in tables %} 
+            {{ table|safe }}
+        {% endfor %}
+    </div>
+</div>
+
+<div id="hideDiv" style="display:none">
+<a href="{{ url_for('data_preprocessing')}}">Data-preprocessing</a>
+</div>
+<script>
+    window.onclose = function() { 
+        sessionStorage.clear();
+    };
+    window.onload = function() {      
+        showDiv();
+    };
+    function showDiv(){
+        if(sessionStorage.getItem("divShow") == "true"){
+            document.getElementById("dispMsg").innerHTML = "Your dataset:";
+            document.getElementById("dispMsg").style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif";
+            document.getElementsByClassName("cardTable")[0].style.boxShadow = '0 4px 8px 0 rgba(0, 0, 0, 0.2)';
+            document.getElementsByClassName("cardTable")[0].style.background = '#74ebd5';
+            document.getElementsByClassName("cardTable")[0].style.background = '-webkit-linear-gradient(to right, #ACB6E5, #74ebd5)';
+            document.getElementsByClassName("cardTable")[0].style.background = 'linear-gradient(to right, #ACB6E5, #74ebd5)';
+            document.getElementById("hideDiv").style.display = "block";
+        }
+        else{
+            document.getElementsByClassName("cardTable")[0].style.boxShadow = '0 4px 8px 0 rgba(0, 0, 0, 0)';
+            document.getElementsByClassName("cardTable")[0].style.backgroundColor = 'rgba(0, 0, 0, 0)'
+            document.getElementById("hideDiv").style.display = "none"; 
+        }
+    }
+    function submit_form(){
+        var idx_name = document.getElementById("idx").value;
+        if(idx_name == "None" || idx_name==""){
+            alert("Please give index column name");
+            sessionStorage.setItem("divShow","false");
+            showDiv();
+            return false;
+        }
+        else{
+            sessionStorage.setItem("divShow","true");
+            return true;
+        }
+    }
+</script>
 {%endblock%}
