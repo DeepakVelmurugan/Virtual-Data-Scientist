@@ -2,8 +2,16 @@
 
 {%block head%}
 <title>Virtual Data scientist</title>
-<h2>Machine Learning Models</h2> 
 <style>
+    body{
+        background: #1A2980;  
+        background: -webkit-linear-gradient(to right, #26D0CE, #1A2980);  
+        background: linear-gradient(to right, #26D0CE, #1A2980); 
+    }
+    h2{
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
     * {
     box-sizing: border-box;
     }
@@ -46,13 +54,25 @@
     /* Style the counter cards */
     .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
     padding: 16px;
     text-align: center;
-    background-color: rgba(168, 138, 216, 0.253);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: #000428;  
+    background: -webkit-linear-gradient(to top, #004e92, #000428);  
+    background: linear-gradient(to top, #004e92, #000428); 
+    }
+
+    .card:hover{
+        background: #1488CC;  
+        background: -webkit-linear-gradient(to top, #2B32B2, #1488CC);  
+        background: linear-gradient(to top, #2B32B2, #1488CC); 
     }
 
     .cardScore {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
     padding: 16px;
     text-align: center;
     background-color: rgba(230, 116, 178, 0.253);
@@ -70,17 +90,16 @@
         text-indent: -1em;
     }
     li:before{
-        /* content: ">";
-        padding-right: 2px; */
         content: "►";
         padding-right: 2px;
         width: 1em;
-        color:rgb(0, 0, 0);
+        color: white;
     }
 </style>
 {%endblock%}
 
 {%block body%}
+<h2>Machine Learning Models</h2> 
 <div class="row">
     <div class="column">
         <div class="card">
@@ -92,10 +111,12 @@
                     <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state_rf" value="0"></p>
                     <p>Evaluation metric:<select id="drop_down_rf" name="evaluation_metric">
                         <option value="MAE">Mean Absolute Error</option>
-                        <option value="Inprogress"><i>(yet to come)</i></option>
+                        <option value="MSE">Root Mean Squared Error</option>
+                        <option value="F1">F1 score</option>
+                        <option value="Accuracy">Accuracy</option>
                     </select></p>
                     <input type="hidden" id="type" name="type" value="randomforest">
-                    <input type="submit" value="Submit" onclick="return submit_RandomForest()">
+                    <input type="submit" value="Submit" onclick="return errorCheckTextBox()">
                 </form>            
             </div>
         </div>
@@ -115,10 +136,12 @@
                     <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state_logr" value="0"></p>
                     <p>Evaluation metric:<select id="drop_down_logr" name="evaluation_metric">
                         <option value="MAE">Mean Absolute Error</option>
-                        <option value="Inprogress"><i>(yet to come)</i></option>
+                        <option value="MSE">Root Mean Squared Error</option>
+                        <option value="F1">F1 score</option>
+                        <option value="Accuracy">Accuracy</option>
                     </select></p>
                     <input type="hidden" id="type" name="type" value="logisticregression">
-                    <input type="submit" value="Submit">
+                    <input type="submit" value="Submit" onclick="return errorCheckTextBox()">
                 </form>
             </div>
         </div>
@@ -139,10 +162,10 @@
                         </select></p>
                     <p>Evaluation metric:<select id="drop_down_rf" name="evaluation_metric">
                         <option value="MAE">Mean Absolute Error</option>
-                        <option value="Inprogress"><i>(yet to come)</i></option>
+                        <option value="MSE">Root Mean Squared Error</option>
                     </select></p>
                     <input type="hidden" id="type" name="type" value="LinearRegression">
-                    <input type="submit" value="Submit" >
+                    <input type="submit" value="Submit" onclick="return errorCheckTextBox()" >
                 </form>
             </div>
         </div>
@@ -159,10 +182,12 @@
                     <p>Learning rate:<input name="learning_rate" id = "learning_rate" value="0.01"></p>
                     <p>Evaluation metric:<select id="drop_down_xgb" name="evaluation_metric">
                         <option value="MAE">Mean Absolute Error</option>
-                        <option value="Inprogress"><i>(yet to come)</i></option>
+                        <option value="MSE">Root Mean Squared Error</option>
+                        <option value="F1">F1 score</option>
+                        <option value="Accuracy">Accuracy</option>
                     </select></p>
                     <input type="hidden" id="type" name="type" value="XGBoost">
-                    <input type="submit" value="Submit">
+                    <input type="submit" value="Submit" onclick="return errorCheckTextBox()">
                 </form>
             </div>
         </div>
@@ -178,10 +203,12 @@
                     <p>Random State:<input placeholder="Random State..." name="random_state" id="random_state_dtc" value="0"></p>
                     <p>Evaluation metric:<select id="drop_down_rf" name="evaluation_metric">
                         <option value="MAE">Mean Absolute Error</option>
-                        <option value="Inprogress"><i>(yet to come)</i></option>
+                        <option value="MSE">Root Mean Squared Error</option>
+                        <option value="F1">F1 score</option>
+                        <option value="Accuracy">Accuracy</option>
                     </select></p>
                     <input type="hidden" id="type" name="type" value="DecisionTreeClassifier">
-                    <input type="submit" value="Submit">
+                    <input type="submit" value="Submit" onclick="return errorCheckTextBox()">
                 </form>
             </div>
         </div>
@@ -214,6 +241,12 @@
                         <option value="Regression">Regression</option>
                         <option value="Classification">Classification</option>
                      </select></p>
+                     <p>Evaluation metric:<select id="drop_down_nn" name="evaluation_metric">
+                        <option value="MAE">Mean Absolute Error</option>
+                        <option value="MSE">Root Mean Squared Error</option>
+                        <option value="F1">F1 score</option>
+                        <option value="Accuracy">Accuracy</option>
+                    </select></p>
                      <input type="hidden" id="type" name="type" value="NeuralNets">
                      <input type="submit" value="Submit" onclick="return fillhiddenlayers()">
                   </form>
@@ -233,11 +266,16 @@
                             localStorage.setItem("scores",currScore)
                         }
                         else if(parseInt(scores)>currScore){
-                            document.getElementsByClassName("cardScore")[0].style.backgroundColor = 'rgb(144,238,144)';
+                            document.getElementsByClassName("cardScore")[0].style.background = '#AAFFA9';
+                            document.getElementsByClassName("cardScore")[0].style.background = '-webkit-linear-gradient(to right, #11FFBD, #AAFFA9)';
+                            document.getElementsByClassName("cardScore")[0].style.background = 'linear-gradient(to right, #11FFBD, #AAFFA9)';
                             localStorage.setItem("scores",currScore)
                         }
                         else{
-                            document.getElementsByClassName("cardScore")[0].style.backgroundColor = 'rgb(255, 51, 51)';
+                            document.getElementsByClassName("cardScore")[0].style.background = '#f85032';
+                            document.getElementsByClassName("cardScore")[0].style.background = '-webkit-linear-gradient(to top, #e73827, #f85032)';
+                            document.getElementsByClassName("cardScore")[0].style.background = 'linear-gradient(to top, #e73827, #f85032)';
+
                             localStorage.setItem("scores",currScore)
                         }
                     }
@@ -294,22 +332,35 @@
         return true;
     }
     function fillhiddenlayers(){
+        flag = errorCheckTextBox();
+        if(!flag){
+            return false;
+        }
         hidden_layers.value = layers;
         if(document.getElementById("momemtum").checked){
             document.getElementById("momemtum").value = "True";
         }
     }
-
-    function submit_RandomForest(){
-        var random_state = Math.round(document.getElementById("random_state_rf").value);
-        if(isNaN(random_state)){
-            alert("Proper input required");
-            return false;
+    //Error checking all the textboxes
+    function errorCheckTextBox(){
+        var inputTags = document.getElementsByTagName("INPUT");
+        var inputTagsArr = [];
+        for(var cnt=0;cnt<inputTags.length;cnt++){
+            if(inputTags[cnt].type=="text"){
+                inputTagsArr.push(inputTags[cnt]);
+            }
         }
-        else{
-            alert("Prediction successfull");
-            return true;
-        } 
+        for(var cnt=0;cnt<inputTagsArr.length;cnt++){
+            var get_value = inputTagsArr[cnt].value;
+            if(get_value == "None" || get_value==""){
+                continue;
+            }
+            else if(isNaN(Math.round(get_value))){
+                alert("Please check your inputs");
+                return false;
+            }
+        }
+        return true;
     }
 </script>
 {% endblock %}
