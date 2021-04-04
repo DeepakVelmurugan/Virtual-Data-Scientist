@@ -27,5 +27,4 @@ Make sure to input csv files :white_check_mark:. It only works if a target varia
 Currently the above mentioned functions are present, it may increase in the future :thinking:.<br> 
 If you need any new functionality in this pipeline just raise a issue in this repo.
 
-<strong>The website is not deployed yet</strong><br>
-<i>After some minor checks it will be up soon.</i>
+<strong>Check out the website here [virtual-data-scientist](https://virtual-data-scientist.herokuapp.com)</strong><br>
