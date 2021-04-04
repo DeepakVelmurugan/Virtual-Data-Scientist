@@ -2,6 +2,115 @@
 
 {%block head%}
 <title>Virtual Data scientist</title>
+<style>
+
+body{
+    background: #1D976C;  
+    background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  
+    background: linear-gradient(to right, #93F9B9, #1D976C); 
+}
+    /* --Collapsible part-- */
+.collapsible {
+    background: #43cea2;  
+    background: -webkit-linear-gradient(to right, #185a9d, #43cea2);  
+    background: linear-gradient(to right, #185a9d, #43cea2); 
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  .collapsible:hover {
+    background: #ec008c;  
+    background: -webkit-linear-gradient(to top, #fc6767, #ec008c);  
+    background: linear-gradient(to top, #fc6767, #ec008c); 
+  }
+  
+  .content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background: #1D976C;  
+    background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  
+    background: linear-gradient(to right, #93F9B9, #1D976C); 
+    
+  }
+/* --Slider in train-test-- */
+.slidecontainer{
+    width: 100%;
+}
+
+.slide{
+    -webkit-appearance: none;
+    width:100%;
+    height:10px;
+    border-radius: 5px;
+    background: #69bff1;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition:.2s;
+    transition:opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #ff0c0c;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #ff0c0c;
+    cursor: pointer;
+  }
+   .columnTable {
+            float: right;   
+            display: flex;           /* establish flex container */
+            width: 90%;
+            height: 90%;
+            padding: 70px 100px;
+        }
+    .cardTable {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0);
+    }
+  a{
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        background: #43cea2;  
+        background: -webkit-linear-gradient(to right, #185a9d, #43cea2);  
+        background: linear-gradient(to right, #185a9d, #43cea2);
+        padding:20px;
+        width:200px;
+        height:150px;
+        border-radius: 25px;
+        color: white;
+        text-decoration: none;
+    }
+    a:hover{
+        background: #ec008c; 
+        background: -webkit-linear-gradient(to top, #fc6767, #ec008c);  
+        background: linear-gradient(to top, #fc6767, #ec008c); 
+    }
+</style>
 {%endblock%}
 
 {%block body%}
@@ -65,10 +174,41 @@
             <input type="submit" value="Submit" onclick="return submit_kfold_rg()">
             </form>
         </div>
-    
+        <div class="columnTable">
+            <div class="cardTable">
+            {% for table in tables %} 
+                {{ table|safe }}
+            {% endfor %}
+            </div>
+        </div>
+        </br>
+        <div id="hideDiv" style="display:none">
+        <a href="{{ url_for('MLmodels')}}">Predict using ML</a>
+        </div>
+
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script>
+    window.onload = function() { 
+        if(sessionStorage.getItem("divShow") == "trueSecond"){
+            sessionStorage.setItem("divShow") = "false";
+        }     
+        showDiv();
+    };
+    function showDiv(){
+        if(sessionStorage.getItem("divShow") == "trueThird"){
+            document.getElementsByClassName("cardTable")[0].style.boxShadow = '0 4px 8px 0 rgba(0, 0, 0, 0.2)';
+            document.getElementsByClassName("cardTable")[0].style.background = '#43cea2';
+            document.getElementsByClassName("cardTable")[0].style.background = '-webkit-linear-gradient(to right, #185a9d, #43cea2)';
+            document.getElementsByClassName("cardTable")[0].style.background = 'linear-gradient(to top, #185a9d, #43cea2)';
+            document.getElementById("hideDiv").style.display = "block";
+        }
+        else{
+            document.getElementsByClassName("cardTable")[0].style.boxShadow = '0 4px 8px 0 rgba(0, 0, 0, 0)';
+            document.getElementsByClassName("cardTable")[0].style.backgroundColor = 'rgba(0, 0, 0, 0)'
+            document.getElementById("hideDiv").style.display = "none"; 
+        }
+    }
     //collapsible
     var coll = document.getElementsByClassName("collapsible");
     var i;
@@ -98,13 +238,16 @@
         if(split_value<50){
             if(confirm("Training data seems to have less data than validation. Do you wish to continue?")){
                 alert("Train-Test split successfull");
+                sessionStorage.setItem("divShow","trueThird");
                 return true;
             }
             else{
+                sessionStorage.setItem("divShow","false");
                 return false;
             }
         }
         else{
+            sessionStorage.setItem("divShow","trueThird");
             alert("Train-Test split successfull");
             return true;
         }     
@@ -113,10 +256,12 @@
         var random_state = Math.round(document.getElementById("random_state").value);
         if(isNaN(random_state)){
             alert("Proper input required");
+            sessionStorage.setItem("divShow","false");
             return false;
         }
         else{
             alert("K-fold split is successfull");
+            sessionStorage.setItem("divShow","trueThird");
             return true;
         }
     }
@@ -124,10 +269,12 @@
         var random_state = Math.round(document.getElementById("random_state_st").value);
         if(isNaN(random_state)){
             alert("Proper input required");
+            sessionStorage.setItem("divShow","false");
             return false;
         }
         else{
             alert("Stratified K-fold split is successfull");
+            sessionStorage.setItem("divShow","trueThird");
             return true;
         } 
     }
@@ -135,18 +282,14 @@
         var random_state = Math.round(document.getElementById("random_state_rg").value);
         if(isNaN(random_state)){
             alert("Proper input required");
+            sessionStorage.setItem("divShow","false");
             return false;
         }
         else{
             alert("Stratified K-fold split for regression is successfull");
+            sessionStorage.setItem("divShow","trueThird");
             return true;
         }  
     }
-        // $.ajax({   
-        //     contentType: "application/json;charset=utf-8",
-        //     url: "/train_test",
-        //     type:"POST",
-        //     data: JSON.stringify(dt),
-        // });
 </script>
 {%endblock%}
